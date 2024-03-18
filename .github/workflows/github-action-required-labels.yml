@@ -1,0 +1,18 @@
+name: Pull Request Labels
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: mheap/github-action-required-labels@v5
+        with:
+          mode: minimum
+          count: 2
+          labels: '[TR] on develop, [TR] on preprod'
+          add_comment: true
+          message: "This PR is being prevented from merging because it's missing one of the required labels labels: {{ provided }}. You'll need to add them before this PR can be merged."
