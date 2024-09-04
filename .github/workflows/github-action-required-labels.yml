@@ -1,7 +1,7 @@
 name: Pull Request Labels
 on:
   pull_request:
-    types: [opened, labeled, unlabeled, synchronize]
+    types: [labeled, unlabeled, closed]
 jobs:
   label:
     runs-on: ubuntu-latest
@@ -13,6 +13,6 @@ jobs:
         with:
           mode: minimum
           count: 2
-          labels: '[TR] on develop, [TR] on preprod'
+          labels: "[TR] on develop, [TR] on preprod"
           add_comment: true
           message: "This PR is being prevented from merging because it's missing one of the required labels labels: {{ provided }}. You'll need to add them before this PR can be merged."
