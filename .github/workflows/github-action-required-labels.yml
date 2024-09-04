@@ -1,9 +1,12 @@
-name: Pull Request Labels
+name: Pull Request Labels Check
 on:
   pull_request:
     types: [opened, labeled, unlabeled, synchronize]
+    branches:
+      - main
+
 jobs:
-  label:
+  label_check:
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -15,4 +18,9 @@ jobs:
           count: 2
           labels: "[TR] on develop, [TR] on preprod"
           add_comment: true
-          message: "This PR is being prevented from merging because it's missing one of the required labels labels: {{ provided }}. You'll need to add them before this PR can be merged."
+          message: "This PR is being prevented from merging because it's missing one of the required labels: {{ provided }}. You'll need to add them before this PR can be merged."
+      - name: Prevent merge on failure
+        if: failure()
+        run: |
+          echo "Required labels are missing. Failing the workflow to prevent merge."
+          exit 1
